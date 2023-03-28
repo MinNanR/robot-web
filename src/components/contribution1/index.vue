@@ -8,7 +8,7 @@
           </el-select>
         </div>
         <div>
-          <ul v-infinite-scroll="loadData" class="infinite-list" style="overflow: auto">
+          <ul v-infinite-scroll="loadRecord" class="infinite-list" style="overflow: auto">
             <li v-for="record in recordList" :key="record.id" class="infinite-list-item" @click="choseRecord(record.id)">
               {{
                 record.timeDesc }}</li>
@@ -16,18 +16,28 @@
         </div>
       </el-col>
       <el-col :span="18" :loading="recordLoading">
-        <el-row style="height: 70vh">
+        <el-row style="height: 70vh" :gutter="10">
           <el-col :span="12">
-            截图
+            <div class="demo-image" v-if="importPageInfo.pageIndex != 0">
+              <div class="block">
+                <el-image style="width: 100%; height: 100%"
+                  :src="importPageInfo.pageList[importPageInfo.pageIndex - 1].picUrl" fit="fill" />
+              </div>
+            </div>
           </el-col>
-          <el-col :span="12">
-            识别结果
+          <el-col :span="12" v-if="importPageInfo.pageIndex != 0">
+            <el-table :data="resultList" stripe style="width: 100%" :max-height="tableHeight">
+              <el-table-column prop="name" label="游戏id"> </el-table-column>
+              <el-table-column prop="flagRace" label="跑旗"> </el-table-column>
+              <el-table-column prop="culvert" label="水路"></el-table-column>
+            </el-table>
           </el-col>
         </el-row>
         <!-- <el-divider /> -->
         <el-row style="display: flex;justify-content: center;" v-show="currentRecordId != 0">
           <div>
-            <el-pagination background page-size="1" layout="prev, pager, next" :total="pageCount" class="mt-4" />
+            <el-pagination background page-size="1" layout="prev, pager, next" :page-count="pageCount" class="mt-4"
+              @current-change="handleCurrenthange" v-if="pageCount > 0" />
             <div style="margin-top:10px;">
               <el-button type="primary" @click="proctedDialog = true">
                 <el-icon size="16">
@@ -92,7 +102,6 @@ export default {
       haveMore: false,
       guildLoading: false,
       recordLoading: false,
-      pageCount: 0,
       proctedDialog: false,
       uploadDialog: false,
       proctedForm: {
@@ -100,7 +109,14 @@ export default {
       },
       operationInfo: {
         token: ""
-      }
+      },
+      importPageInfo: {
+        pageList: [],
+        pageIndex: 0,
+      },
+      pageCount: 0,
+      resultList: [],
+      tableHeight: 0
     };
   },
   methods: {
@@ -146,13 +162,14 @@ export default {
       this.recordList = [];
       this.getImportRecordList();
     },
-    loadData() {
+    loadRecord() {
       this.guildQueryForm.pageIndex += 1
       this.getImportRecordList()
     },
     choseRecord(recordId) {
       console.log(recordId)
       this.currentRecordId = recordId;
+      this.getRecordPageList();
     },
     verifyProcetedCode() {
       this.proctedForm.id = this.currentRecordId
@@ -188,12 +205,71 @@ export default {
     closeUploadDialog() {
       this.uploadDialog = false
       //刷新页面
+    },
+    getRecordPageList() {
+      this.pageIndex = 0
+      this.request
+        .post("/miao-api/record/getRecordPageList", {
+          id: this.currentRecordId
+        })
+        .then((response) => {
+          let data = response.data;
+          let list = data.list
+          if (list != null) {
+            this.importPageInfo.pageList = list
+            this.importPageInfo.pageIndex = 1
+            this.pageCount = data.totalCount
+            let pageId = list[0].id
+            this.getContributionResult(pageId)
+          } else {
+            // ElMessage({
+            //   message: "保护码错误",
+            //   type: "error",
+            // });
+          }
+          console.log(this.pageCount)
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    },
+    getContributionResult(id) {
+      this.resultList = []
+      this.request
+        .post("/miao-api/record/getContributionResult", {
+          id: id
+        })
+        .then((response) => {
+          let data = response.data;
+          let list = data.list
+          if (list != null) {
+            this.resultList = list
+          } else {
+            // ElMessage({
+            //   message: "保护码错误",
+            //   type: "error",
+            // });
+          }
+          console.log(this.pageCount)
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    },
+    handleCurrenthange(val) {
+      let pageId = this.pageInfo.pageList[val - 1].id
+      this.getContributionResult(pageId)
     }
   },
 
   created() {
+    console.log(document.body.clientHeight)
     this.getGuildDropDown();
   },
+  mounted() {
+    console.log(document.body.clientHeight)
+    this.tableHeight = document.body.clientHeight * 0.6 + "px"
+  }
 };
 </script>
 
