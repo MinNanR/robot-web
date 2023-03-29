@@ -5,7 +5,8 @@
         <div class="brand">MIAO</div>
         <div>
           <el-menu :uniqueOpened="true" default-active="1" @open="handleOpen" @close="handleClose"
-            background-color="#0e1f3d" text-color="#ffffff" active-color="#136ff0" :router="true" mode="horizontal" :ellipsis="false">
+            background-color="#0e1f3d" text-color="#ffffff" active-color="#136ff0" :router="true" mode="horizontal"
+            :ellipsis="false">
             <el-menu-item v-for="(menu, index) in navList" :key="index" :index="menu.url">
               <template #title>
                 <el-icon>
@@ -18,10 +19,6 @@
         </div>
       </div>
 
-
-      <!-- <div class="header-right">
-      <p>你好,{{ username }}</p>
-    </div> -->
     </div>
   </div>
 </template>
@@ -32,9 +29,17 @@ export default {
     return {
       username: "",
       navList: [{
+        url: "/contribution",
+        name: "MIAO贡记录",
+        icon: "Flag"
+      }, {
         url: "/record",
         name: "上传记录",
         icon: "Document"
+      },{
+        url:"/focus",
+        name:"重点关注",
+        icon:"Warning"
       }]
     };
   },

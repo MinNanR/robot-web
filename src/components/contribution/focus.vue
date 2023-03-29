@@ -4,35 +4,39 @@
       <el-form :inline="true" :model="queryForm" class="demo-form-inline">
         <el-form-item>
           <el-select v-model="queryForm.queryType" placeholder="类型" @change="handleTypeChange">
-            <el-option
-              v-for="item in options"
-              :key="item.value"
-              :label="item.label"
-              :value="item.value"
-            />
+            <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value" />
           </el-select>
         </el-form-item>
       </el-form>
     </div>
-    <el-table
-      :data="memberList"
-      stripe
-      style="width: 100%"
-      size="large"
-      v-loading="loading"
-      :header-cell-style="{ background: '#d7e4fb' }"
-    >
-      <el-table-column type="expand">
+    <el-table :data="memberList" stripe style="width: 100%" size="large" v-loading="loading"
+      :header-cell-style="{ background: '#d7e4fb' }">
+      <!-- <el-table-column type="expand">
         <template #default="props">
           <div>
             <div v-for="item in props.row.recordList" :key="item.id">
               <p>{{item.timeDesc}}:  {{item.flagRace}} / {{item.culvert}}</p>
             </div>
           </div>
-        </template>
-      </el-table-column>
+        </template> -->
+      <!-- </el-table-column> -->
       <el-table-column type="index" width="50"> </el-table-column>
       <el-table-column prop="name" label="游戏id"> </el-table-column>
+      <el-table-column :label="timeList[0] + '(跑旗/水路)'">
+        <template #default="scope">
+          <span v-if="timeList[0] in scope.row.recordList">{{ scope.row.recordList[timeList[0]].flagRace }}/{{ scope.row.recordList[timeList[0]].culvert }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column :label="timeList[1] + '(跑旗/水路)'">
+        <template #default="scope">
+          <span v-if="timeList[1] in scope.row.recordList">{{ scope.row.recordList[timeList[1]].flagRace }}/{{ scope.row.recordList[timeList[1]].culvert }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column :label="timeList[2] + '(跑旗/水路)'">
+        <template #default="scope">
+          <span v-if="timeList[2] in scope.row.recordList">{{ scope.row.recordList[timeList[2]].flagRace }}/{{ scope.row.recordList[timeList[2]].culvert }}</span>
+        </template>
+      </el-table-column>
     </el-table>
     <!-- <div style="display: flex; margin-top: 30px">
       <div class="refresh-btn" @click="getRoomList()">
@@ -75,37 +79,13 @@ export default {
         },
       ],
       queryForm: {
+        guildId: null,
         queryType: 1
       },
       memberList: [
-        // {
-        //   name: "minnanil",
-        //   recordList: [
-        //     {
-        //       timeDesc: "100-100",
-        //       flagRace: 0,
-        //       culvert: 0
-        //     },{
-        //       timeDesc: "100-100",
-        //       flagRace: 0,
-        //       culvert: 1000
-        //     }
-        //   ]
-        // },{
-        //   name: "dyalnshadow",
-        //   recordList: [
-        //     {
-        //       timeDesc: "100-100",
-        //       flagRace: 0,
-        //       culvert: 0
-        //     },{
-        //       timeDesc: "100-100",
-        //       flagRace: 0,
-        //       culvert: 1000
-        //     }
-        //   ]
-        // }
-      ]
+
+      ],
+      timeList: []
     };
   },
   methods: {
@@ -116,18 +96,20 @@ export default {
       this.loading = true;
       // console.log(pageIndex, this.queryForm.pageIndex);
       this.request
-        .post("/contribution/getFocusMemberList", this.queryForm)
+        .post("/miao-api/record/getFocusList", this.queryForm)
         .then((response) => {
           let data = response.data;
-          let memberMap = data.memberList;
-          this.memberList = []
-          for (let member in memberMap){
-            let recordList = memberMap[member]
-            this.memberList.push({
-              "name": member,
-              "recordList": recordList
-            })
-          }
+          this.timeList = data.dateList
+          this.memberList = data.list
+          // let memberMap = data.memberList;
+          // this.memberList = []
+          // for (let member in memberMap){
+          //   let recordList = memberMap[member]
+          //   this.memberList.push({
+          //     "name": member,
+          //     "recordList": recordList
+          //   })
+          // }
           // this.memberList = data.memberList;
           this.loading = false;
         })

@@ -42,7 +42,7 @@ const routes = [{
         }
     },{
         path: "record",
-        component: () => import('../components/contribution1/index.vue'),
+        component: () => import('../components/record/index.vue'),
         meta: {
             title: "MIAO"
         }

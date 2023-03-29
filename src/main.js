@@ -6,7 +6,7 @@ import locale from 'element-plus/lib/locale/lang/zh-cn'
 import router from './router'
 import request from './utils/request'
 import App from './App.vue'
-import { House, Flag, Warning, CirclePlus, Plus,QuestionFilled,Document } from '@element-plus/icons-vue'
+import { House, Flag, Warning, CirclePlus, Plus,QuestionFilled,Document,Edit,Search } from '@element-plus/icons-vue'
 
 const app = createApp(App)
 
@@ -20,6 +20,8 @@ app.component('CirclePlus', CirclePlus)
 app.component('Plus', Plus)
 app.component('QuestionFilled', QuestionFilled)
 app.component("Document", Document)
+app.component("Edit", Edit)
+app.component("Search", Search)
 app.mount("#app")
 
 
