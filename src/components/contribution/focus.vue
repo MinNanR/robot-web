@@ -90,11 +90,7 @@ export default {
   },
   methods: {
     getFocustList() {
-      // console.log(this.weekStartDate)
-      // var d = datejs(this.value1).fromat("YYYY-MMD-DD")
-      // console.log(d)
       this.loading = true;
-      // console.log(pageIndex, this.queryForm.pageIndex);
       this.request
         .post("/miao-api/record/getFocusList", this.queryForm)
         .then((response) => {

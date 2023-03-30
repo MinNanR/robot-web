@@ -94,7 +94,7 @@
     </el-dialog>
 
     <el-dialog v-model="uploadDialog" title="上传跑旗截图" close-on-click-modal="false">
-      <el-upload class="upload-demo" action="http://localhost:8901/miao-api/record/uploadPic" :data="operationInfo">
+      <el-upload class="upload-demo" :action="uploadUrl" :data="operationInfo">
         <el-button type="primary">
           <el-icon size="16">
             <CirclePlus />
@@ -161,11 +161,13 @@
 
 <script>
 import { ElMessage } from "element-plus";
+import config from '../../utils/config'
 import md5 from "js-md5";
 
 export default {
   data() {
     return {
+      uploadUrl: "",
       guildDropDown: [{}],
       guildQueryForm: {
         guildId: "",
@@ -250,7 +252,6 @@ export default {
       this.getImportRecordList()
     },
     choseRecord(recordId) {
-      console.log(recordId)
       this.currentRecordId = recordId;
       this.editMode = false
 
@@ -321,7 +322,6 @@ export default {
             //   type: "error",
             // });
           }
-          console.log(this.pageCount)
         })
         .catch((error) => {
           console.log(error);
@@ -348,7 +348,6 @@ export default {
         });
     },
     handleCurrenthange(val) {
-      console.log(val)
       if (this.importPageInfo.pageList.length == 0) {
         return
       }
@@ -361,7 +360,6 @@ export default {
       this.protectDialog = true
     },
     handleOpenEditDialog(row) {
-      console.log(row.id)
       this.editForm = {
         id: row.id,
         name: row.name,
@@ -417,12 +415,13 @@ export default {
   },
 
   created() {
-    console.log(document.body.clientHeight)
     this.getGuildDropDown();
   },
   mounted() {
-    console.log(document.body.clientHeight)
     this.tableHeight = document.body.clientHeight * 0.6 + "px"
+    console.log(config)
+    this.uploadUrl = `${config.baseUrl}/miao-api/record/uploadPic`
+    console.log(this.uploadUrl)
   }
 };
 </script>

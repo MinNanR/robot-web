@@ -115,12 +115,7 @@ export default {
       this.getFocustList();
     },
     getContributionList(pageIndex) {
-      console.log(pageIndex);
-      // console.log(this.weekStartDate)
-      // var d = datejs(this.value1).fromat("YYYY-MMD-DD")
-      // console.log(d)
       this.loading = true;
-      // console.log(pageIndex, this.queryForm.pageIndex);
       this.queryForm.pageIndex = pageIndex || this.queryForm.pageIndex;
       this.request
         .post("/contribution/getContributionList", this.queryForm)
