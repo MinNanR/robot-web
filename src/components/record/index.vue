@@ -28,7 +28,7 @@
           <el-col :span="12" v-if="importPageInfo.pageIndex != 0">
             <el-table :data="resultList" stripe style="width: 100%" :max-height="tableHeight" v-loading="tableLoading">
               <!-- <el-table-column prop="name" label="游戏id"> </el-table-column> -->
-              <el-table-column v-if="editMode" label="水路" width="80">
+              <el-table-column v-if="editMode" label="#" width="80">
                 <template #default="scope">
                   <el-button type="primary" @click="handleOpenEditDialog(scope.row)" size="small">
                     <el-icon size="12">
@@ -139,10 +139,10 @@
         {{ omit }}
         </li>
       </ul> -->
-      <div >
+      <div>
         <el-row>
           <el-col :span="4" v-for="omit in omitList" :key="omit">
-          <p>{{ omit }}</p>
+            <p>{{ omit }}</p>
           </el-col>
         </el-row>
 
@@ -254,7 +254,7 @@ export default {
     choseRecord(recordId) {
       this.currentRecordId = recordId;
       this.editMode = false
-
+      this.operationInfo.token = ""
       this.getRecordPageList();
     },
     verifyProcetedCode() {
@@ -271,13 +271,13 @@ export default {
           let result = data.result
           if (result) {
             this.protectDialog = false;
-            // this.uploadDialog = true;
+            this.operationInfo.token = data.token
             if (this.operation == 1) {
               this.uploadDialog = true;
             } else {
               this.editMode = true;
             }
-            this.operationInfo.token = data.token
+            this.proctedForm.protectCode = ""
           } else {
             ElMessage({
               message: "保护码错误",
@@ -357,6 +357,14 @@ export default {
     },
     handleOpenProtectDialog(operation) {
       this.operation = operation
+      if (this.operationInfo.token != null && this.operationInfo.token != "") {
+        if (this.operation == 1) {
+          this.uploadDialog = true;
+        } else {
+          this.editMode = true;
+        }
+        return
+      }
       this.protectDialog = true
     },
     handleOpenEditDialog(row) {
@@ -419,9 +427,7 @@ export default {
   },
   mounted() {
     this.tableHeight = document.body.clientHeight * 0.6 + "px"
-    console.log(config)
     this.uploadUrl = `${config.baseUrl}/miao-api/record/uploadPic`
-    console.log(this.uploadUrl)
   }
 };
 </script>

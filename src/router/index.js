@@ -15,7 +15,7 @@ const routes = [{
     children: [{
         path: "/",
         component: () =>
-            import('../components/index/index.vue'),
+            import('../components/record/index.vue'),
         meta: {
             title: "主页"
         }
@@ -30,13 +30,6 @@ const routes = [{
         path: "focus",
         component: () =>
             import('../components/contribution/focus.vue'),
-        meta: {
-            title: "MIAO"
-        }
-    }, {
-        path: "error",
-        component: () =>
-            import('../components/contribution/error.vue'),
         meta: {
             title: "MIAO"
         }
