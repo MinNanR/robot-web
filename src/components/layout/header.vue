@@ -40,6 +40,10 @@ export default {
         url:"/focus",
         name:"重点关注",
         icon:"Warning"
+      },{
+        url:"/battle",
+        name:"战斗分析",
+        icon:"Histogram"
       }]
     };
   },

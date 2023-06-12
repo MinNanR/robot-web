@@ -18,7 +18,7 @@
           </el-select>
         </el-form-item>
         <el-form-item label="游戏id">
-          <el-input v-model="queryForm.name" placeholder="游戏id">
+          <el-input v-model="queryForm.name" placeholder="游戏id" @keyup.enter="getContributionList(1)">
             <template #append>
               <el-switch
                 v-model="queryForm.queryType"
