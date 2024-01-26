@@ -6,7 +6,7 @@ import locale from 'element-plus/lib/locale/lang/zh-cn'
 import router from './router'
 import request from './utils/request'
 import App from './App.vue'
-import { House, Flag, Warning, CirclePlus, Plus,QuestionFilled,Document,Edit,Search,Histogram } from '@element-plus/icons-vue'
+import { House, Flag, Warning, CirclePlus, Plus, QuestionFilled, Document, Edit, Search, Histogram, Collection, Odometer, SetUp, Lock, User } from '@element-plus/icons-vue'
 import * as echarts from 'echarts'
 
 const app = createApp(App)
@@ -24,6 +24,11 @@ app.component("Document", Document)
 app.component("Edit", Edit)
 app.component("Search", Search)
 app.component("Histogram", Histogram)
+app.component("Collection", Collection)
+app.component("Odometer", Odometer)
+app.component("SetUp", SetUp)
+app.component("Lock", Lock)
+app.component("User", User)
 app.mount("#app")
 app.config.globalProperties.$echarts = echarts
 

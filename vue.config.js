@@ -1,6 +1,6 @@
-// const webpack = require('webpack')
+const webpack = require('webpack')
 
-// module.exports = {
-//   publicPath: '/miao/',
-//   assetsDir: '.'
-// }
+module.exports = {
+  publicPath: '/miao/',
+  assetsDir: '.'
+}

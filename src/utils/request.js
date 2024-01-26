@@ -9,7 +9,7 @@ const request = axios.create({
     headers: {
         'Content-Type': 'application/json',
         'Accept': 'application/json',
-        "Access-Control-Allow-Origin":"*"
+        "Access-Control-Allow-Origin": "*"
     },
     // transformRequest: [
     //     (data) => {
@@ -32,9 +32,10 @@ request.interceptors.request.use(
 request.interceptors.response.use(
     response => {
         if (response.status === 200) {
+            console.log(response.headers["Set-Cookie"])
             let data = response.data
             if (data.code === '000') {
-                if(response.headers['newtoken'] != null){
+                if (response.headers['newtoken'] != null) {
                     localStorage.setItem("robot-token", `Bearer ${response.headers.newtoken}`);
                 }
                 return { data: data.data, message: data.message }

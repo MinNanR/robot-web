@@ -2,12 +2,25 @@
   <div class="header">
     <div>
       <div style="display: flex">
-        <div class="brand">MIAO</div>
+        <div class="brand">民难科技</div>
         <div>
-          <el-menu :uniqueOpened="true" default-active="1" @open="handleOpen" @close="handleClose"
-            background-color="#0e1f3d" text-color="#ffffff" active-color="#136ff0" :router="true" mode="horizontal"
-            :ellipsis="false">
-            <el-menu-item v-for="(menu, index) in navList" :key="index" :index="menu.url">
+          <el-menu
+            :uniqueOpened="true"
+            default-active="1"
+            @open="handleOpen"
+            @close="handleClose"
+            background-color="#0e1f3d"
+            text-color="#ffffff"
+            active-color="#136ff0"
+            :router="true"
+            mode="horizontal"
+            :ellipsis="false"
+          >
+            <el-menu-item
+              v-for="(menu, index) in navList"
+              :key="index"
+              :index="menu.url"
+            >
               <template #title>
                 <el-icon>
                   <component :is="menu.icon" />
@@ -18,7 +31,6 @@
           </el-menu>
         </div>
       </div>
-
     </div>
   </div>
 </template>
@@ -28,23 +40,55 @@ export default {
   data() {
     return {
       username: "",
-      navList: [{
-        url: "/contribution",
-        name: "MIAO贡记录",
-        icon: "Flag"
-      }, {
-        url: "/record",
-        name: "上传记录",
-        icon: "Document"
-      },{
-        url:"/focus",
-        name:"重点关注",
-        icon:"Warning"
-      },{
-        url:"/battle",
-        name:"战斗分析",
-        icon:"Histogram"
-      }]
+      // navList: [{
+      //   url: "/contribution",
+      //   name: "MIAO贡记录",
+      //   icon: "Flag"
+      // }, {
+      //   url: "/record",
+      //   name: "上传记录",
+      //   icon: "Document"
+      // },{
+      //   url:"/focus",
+      //   name:"重点关注",
+      //   icon:"Warning"
+      // },{
+      //   url:"/battle",
+      //   name:"战斗分析",
+      //   icon:"Histogram"
+      // }]
+      navList: [
+        {
+          url: "/question",
+          name: "词条管理",
+          icon: "Collection",
+        },
+        {
+          url: "/strategy",
+          name: "消息处理策略",
+          icon: "Odometer",
+        },
+        {
+          url: "/nick",
+          name: "查询关键字管理",
+          icon: "Flag",
+        },
+        {
+          url: "/queryMap",
+          name: "快捷查询管理",
+          icon: "SetUp",
+        },
+        {
+          url: "/authManage",
+          name: "权限管理",
+          icon: "Lock",
+        },
+        {
+          url: "/user",
+          name: "用户管理",
+          icon: "User",
+        },
+      ],
     };
   },
   methods: {

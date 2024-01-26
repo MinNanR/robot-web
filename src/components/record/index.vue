@@ -8,7 +8,7 @@
           </el-select>
         </div>
         <div>
-          <ul v-infinite-scroll="loadRecord" class="infinite-list" style="overflow: auto">
+          <ul v-infinite-scroll="loadRecord" v-infinite-scroll-delay="1000" class="infinite-list" style="overflow: auto">
             <li v-for="record in recordList" :key="record.id" class="infinite-list-item" @click="choseRecord(record.id)">
               {{
                 record.timeDesc }}</li>
