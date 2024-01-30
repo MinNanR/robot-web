@@ -47,8 +47,8 @@ const routes = [
         path:"question",
         component: () => import('../components/manage/question.vue')
     },{
-        path:"questionInfo",
-        component: () => import('../components/manage/questionInfo.vue')
+        path:"strategy",
+        component: () => import('../components/manage/strategy.vue')
     }
     ]
 }

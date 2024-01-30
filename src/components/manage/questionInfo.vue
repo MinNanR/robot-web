@@ -67,7 +67,7 @@ export default {
     getQuestionInfo(questionId) {
       this.loading = true;
       this.request
-        .post("/api/question/getQuestionInfo", { id: questionId })
+        .post("/robot/api/question/getQuestionInfo", { id: questionId })
         .then((response) => {
           let data = response.data;
           this.answerList = data.answerList;
@@ -85,7 +85,7 @@ export default {
       this.checkList[index].checked = !checked ? 1 : 0;
       console.log(this.checkList[index].checked);
       this.request
-        .post("/api/question/updateCheckGroup", {
+        .post("/robot/api/question/updateCheckGroup", {
           id: this.questionId,
           checkList: this.checkList,
         })
@@ -99,14 +99,19 @@ export default {
         })
         .catch((error) => {
           console.log(error);
-          this.error(error);
+          ElNotification.error({
+            title: "操作失败",
+            message: error,
+            showClose: true,
+            duration: 2000,
+          });
           this.loading = false;
         });
     },
     deleteAsnwer(id) {
       this.dataModify();
       this.request
-        .post("/api/question/delAnswer", { id: id })
+        .post("/robot/api/question/delAnswer", { id: id })
         .then((response) => {
           ElNotification.success({
             title: "操作成功",
@@ -132,7 +137,7 @@ export default {
         });
 
       // this.request
-      //   .post("/api/question/getQuestionInfo", { id: questionId })
+      //   .post("/robot/api/question/getQuestionInfo", { id: questionId })
       //   .then((response) => {
       //     let data = response.data;
       //     this.answerList = data.answerList;

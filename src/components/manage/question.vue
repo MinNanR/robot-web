@@ -200,7 +200,7 @@ export default {
       this.loading = true;
       this.queryForm.pageIndex = pageIndex || this.queryForm.pageIndex;
       this.request
-        .post("/api/question/getQuestionList", this.queryForm)
+        .post("/robot/api/question/getQuestionList", this.queryForm)
         .then((response) => {
           let data = response.data;
           this.questionList = data.list;
@@ -229,7 +229,7 @@ export default {
     },
     getServiceGroup() {
       this.request
-        .post("/api/question/getServiceGroup")
+        .post("/robot/api/question/getServiceGroup")
         .then((response) => {
           let data = response.data;
           this.serviceGroup = data;
@@ -255,13 +255,13 @@ export default {
     },
     deleteQuestion(id) {
       this.request
-        .post("/api/question/delQuestion", { id: id })
+        .post("/robot/api/question/delQuestion", { id: id })
         .then((response) => {
           ElNotification.success({
             title: "操作成功",
             message: response.message,
             showClose: true,
-            duration: 2000,
+            duration: 2000,   
           });
           this.getQuestionList(1)
         })
