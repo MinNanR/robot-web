@@ -1,6 +1,6 @@
 <template>
   <div class="header">
-    <div>
+    <div style="display: flex;justify-content: space-between;width: 100%">
       <div style="display: flex">
         <div class="brand">民难科技</div>
         <div>
@@ -31,11 +31,16 @@
           </el-menu>
         </div>
       </div>
+      <div style="color: white">
+        <span>你好，{{ username }}</span>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
+
+
 export default {
   data() {
     return {
@@ -57,46 +62,60 @@ export default {
       //   name:"战斗分析",
       //   icon:"Histogram"
       // }]
-      navList: [
-        {
-          url: "/question",
-          name: "词条管理",
-          icon: "Collection",
-        },
-        {
-          url: "/strategy",
-          name: "消息处理策略",
-          icon: "Odometer",
-        },
-        {
-          url: "/nick",
-          name: "查询关键字管理",
-          icon: "Flag",
-        },
-        {
-          url: "/queryMap",
-          name: "快捷查询管理",
-          icon: "SetUp",
-        },
-        {
-          url: "/authManage",
-          name: "权限管理",
-          icon: "Lock",
-        },
-        {
-          url: "/user",
-          name: "用户管理",
-          icon: "User",
-        },
-      ],
+      // navList: [
+      //   {
+      //     url: "/question",
+      //     name: "词条管理",
+      //     icon: "Collection",
+      //   },
+      //   {
+      //     url: "/strategy",
+      //     name: "消息处理策略",
+      //     icon: "Odometer",
+      //   },
+      //   {
+      //     url: "/nick",
+      //     name: "查询关键字管理",
+      //     icon: "Flag",
+      //   },
+      //   {
+      //     url: "/queryMap",
+      //     name: "快捷查询管理",
+      //     icon: "SetUp",
+      //   },
+      //   {
+      //     url: "/authManage",
+      //     name: "权限管理",
+      //     icon: "Lock",
+      //   },
+      //   {
+      //     url: "/user",
+      //     name: "用户管理",
+      //     icon: "User",
+      //   },
+      // ],
+      navList:[]
     };
   },
   methods: {
     getUserInfo() {
+      // this.request
+      //   .post("/common/getUserInfo", {})
+      //   .then((response) => {
+      //     this.username = response.data.username;
+      //   })
+      //   .catch((error) => {
+      //     console.log(error);
+      //   });
+      let nickName = localStorage.getItem("nickName")
+      this.username = nickName
+    },
+    getMenuList() {
       this.request
-        .post("/common/getUserInfo", {})
+        .post("/robot/api/auth/getMenuList", {})
         .then((response) => {
-          this.username = response.data.username;
+          let data = response.data;
+          this.navList = data;
         })
         .catch((error) => {
           console.log(error);
@@ -110,7 +129,8 @@ export default {
     },
   },
   mounted() {
-    // this.getUserInfo();
+    this.getUserInfo();
+    this.getMenuList()
   },
 };
 </script>

@@ -46,7 +46,7 @@
             >详情</el-button
           >
           <el-popconfirm
-            :title="'确认删除词条' + scope.row.content +'吗？'"
+            :title="'确认删除词条' + scope.row.content + '吗？'"
             confirm-button-type="danger"
             @confirm="deleteQuestion(scope.row.id)"
           >
@@ -209,7 +209,12 @@ export default {
         })
         .catch((error) => {
           console.log(error);
-          this.error(error);
+          ElNotification.error({
+            title: "操作失败",
+            message: error,
+            showClose: true,
+            duration: 2000,
+          });
           this.loading = false;
         });
     },
@@ -237,7 +242,12 @@ export default {
         })
         .catch((error) => {
           console.log(error);
-          this.error(error);
+          ElNotification.error({
+            title: "操作失败",
+            message: error,
+            showClose: true,
+            duration: 2000,
+          });
           this.loading = false;
         });
     },
@@ -261,9 +271,9 @@ export default {
             title: "操作成功",
             message: response.message,
             showClose: true,
-            duration: 2000,   
+            duration: 2000,
           });
-          this.getQuestionList(1)
+          this.getQuestionList(1);
         })
         .catch((error) => {
           console.log(error);
@@ -275,7 +285,7 @@ export default {
             duration: 2000,
           });
         });
-    }
+    },
   },
   mounted() {
     this.getServiceGroup();

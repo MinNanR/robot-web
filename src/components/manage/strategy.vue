@@ -97,7 +97,7 @@
       </el-table-column>
     </el-table>
     <div style="display: flex; margin-top: 30px">
-      <div class="refresh-btn" @click="getQuestionList(1)">
+      <div class="refresh-btn" @click="getStrategyList(1)">
         <i class="el-icon-refresh-right"></i>
       </div>
       <el-pagination
@@ -175,7 +175,12 @@ export default {
         })
         .catch((error) => {
           console.log(error);
-          this.error(error);
+          ElNotification.error({
+            title: "操作失败",
+            message: error,
+            showClose: true,
+            duration: 2000,
+          });
           this.loading = false;
         });
     },

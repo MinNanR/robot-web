@@ -44,11 +44,12 @@ export default {
         password: md5(this.loginForm.password),
       };
       this.request
-        .post("/robot/auth/login", submitForm)
+        .post("/robot/api/auth/login", submitForm)
         .then((response) => {
           let data = response.data;
           let token = data.token;
           localStorage.setItem("robot-token", `Bearer ${token}`);
+          localStorage.setItem("nickName", data.nickName);
           this.$router.push('/');
         })
         .catch((error) => {

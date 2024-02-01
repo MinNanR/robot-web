@@ -1,6 +1,6 @@
 const webpack = require('webpack')
 
 module.exports = {
-  publicPath: '/miao/',
+  publicPath: '/minnantech/',
   assetsDir: '.'
 }

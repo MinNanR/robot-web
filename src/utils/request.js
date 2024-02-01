@@ -1,6 +1,7 @@
 import axios from 'axios'
 import config from './config.js'
 import app from '../main.js'
+import router from '../router/index.js'
 console.log(config.baseUrl)
 
 const request = axios.create({
@@ -31,6 +32,7 @@ request.interceptors.request.use(
 
 request.interceptors.response.use(
     response => {
+        // console.log(router)
         if (response.status === 200) {
             console.log(response.headers["Set-Cookie"])
             let data = response.data
@@ -47,18 +49,19 @@ request.interceptors.response.use(
         }
     },
     error => {
+        console.log(app)
         if (error.response != null) {
             if (error.response.status != null) {
                 if (error.response.status === 401) {
                     localStorage.removeItem("robot-token")
                     alert("登录信息过期")
-                    app.router.push("/login")
+                    router.push("/login")
                 } else if (error.response.status === 403) {
                     localStorage.removeItem("robot-token")
-                    alert("无权限")
-                    app.router.push('/login')
+                    // alert("无权限")
+                    router.push('/login')
                 }
-                return Promise.reject(error)
+                return Promise.reject(error.response.message)
             } else {
                 return Promise.reject(error)
             }
