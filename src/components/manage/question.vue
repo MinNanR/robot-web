@@ -76,7 +76,6 @@
     <el-dialog
       v-model="questionInfoDialog"
       :title="questionContent"
-      style="500px;"
       destroy-on-close
       width="90%"
       @closed="onDialogClosed"

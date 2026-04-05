@@ -55,8 +55,18 @@ const routes = [
         }, {
             path: "queryMap",
             component: () => import('../components/manage/queryMap.vue')
+        }, {
+            path: "boss",
+            component: () => import('../components/manage/boss.vue'),
+            meta: {
+                title: "BOSS信息管理"
+            }
         }
         ]
+    },
+    {
+        path: "/crystal",
+        component: () => import('../components/manage/crystal.vue')
     }
 ]
 
@@ -66,7 +76,7 @@ const router = createRouter({
 })
 
 router.beforeEach((to, from, next) => {
-    if (to.path == '/unauthorized' || to.path == '/login') {
+    if (to.path == '/unauthorized' || to.path == '/login' || to.path == '/crystal') {
         next()
     } else {
         const token = localStorage.getItem("robot-token")

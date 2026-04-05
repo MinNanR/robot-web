@@ -114,7 +114,7 @@
     </div>
     <el-dialog
       v-model="strategyInfoDialog"
-      style="500px;"
+      style="width: 500px;"
       destroy-on-close
       width="90%"
       @closed="onDialogClosed"
@@ -126,7 +126,7 @@
     </el-dialog>
     <el-dialog
       v-model="addStrategyDialog"
-      style="500px;"
+      style="width: 500px;"
       destroy-on-close
       width="90%"
       @closed="onDialogClosed"

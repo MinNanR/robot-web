@@ -63,7 +63,6 @@
     </div>
     <el-dialog
       v-model="addQueryMapDialog"
-      style="500px;"
       destroy-on-close
       width="90%"
     >
@@ -71,7 +70,6 @@
     </el-dialog>
     <el-dialog
       v-model="updateQueryMapDialog"
-      style="500px;"
       destroy-on-close
       width="90%"
     >

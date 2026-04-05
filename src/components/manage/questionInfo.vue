@@ -1,6 +1,6 @@
 <template>
   <div class="content">
-    <div style="display: flex; margin-top: 10px">
+    <!-- <div style="display: flex; margin-top: 10px">
       <div style="vertical-align: middle">展示群</div>
       <el-checkbox-group v-model="labeList" style="margin-left: 30px">
         <el-checkbox
@@ -11,6 +11,33 @@
           :checked="item.checked == 1"
         />
       </el-checkbox-group>
+    </div> -->
+    <div style="display: flex; margin-top: 10px">
+      <el-form
+        label-width="100px"
+        style="max-width: 700px"
+      >
+        <el-form-item label="展示群">
+          <el-checkbox-group v-model="checkGroupIdList">
+            <el-checkbox
+              v-for="(item, index) in checkList"
+              :key="item.groupId"
+              :label="item.groupId"
+              @change="handleCheckChange(index)"
+            />
+          </el-checkbox-group>
+        </el-form-item>
+        <el-form-item label="展示群掩码">
+          <el-input
+            v-model="groupMask"
+            type="number"
+            @input="onGroupMaskChange"
+          />
+        </el-form-item>
+        <el-form-item>
+          <el-button type="primary" @click="saveQuestion()">保存</el-button>
+        </el-form-item>
+      </el-form>
     </div>
     <el-table
       :data="answerList"
@@ -52,14 +79,17 @@
 
 <script>
 import { ElNotification } from "element-plus";
+import { ref } from "vue";
 
 export default {
   data() {
     return {
       loading: false,
+      checkGroupIdList: [],
       answerList: [],
       checkList: [],
       labeList: [],
+      groupMask: 0,
     };
   },
   props: ["questionId", "closeDialog", "dataModify"],
@@ -71,8 +101,26 @@ export default {
         .then((response) => {
           let data = response.data;
           this.answerList = data.answerList;
+          let checkGroupIdList = []
+          for(let c of data.checkList) {
+            console.log(c)
+            if(c.checked == 1) {
+              checkGroupIdList.push(c.groupId)
+            }
+          }
+          this.checkGroupIdList = ref(checkGroupIdList)
           this.checkList = data.checkList;
+          // this.checkList = data.checkList
+          // newCheckList = [];
+          // for (let c of data.checkList) {
+          //   this.checkList.push({
+
+          //   });
+          // }
+          this.groupMask = data.groupMask;
           this.loading = false;
+          console.log(this.checkList);
+          console.log(this.checkGroupIdList)
         })
         .catch((error) => {
           console.log(error);
@@ -81,32 +129,36 @@ export default {
         });
     },
     handleCheckChange(index) {
+      //当前是否选中状态
       let checked = this.checkList[index].checked == 1;
       this.checkList[index].checked = !checked ? 1 : 0;
-      console.log(this.checkList[index].checked);
-      this.request
-        .post("/robot/api/question/updateCheckGroup", {
-          id: this.questionId,
-          checkList: this.checkList,
-        })
-        .then((response) => {
-          ElNotification.success({
-            title: "操作成功",
-            message: response.message,
-            showClose: true,
-            duration: 2000,
-          });
-        })
-        .catch((error) => {
-          console.log(error);
-          ElNotification.error({
-            title: "操作失败",
-            message: error,
-            showClose: true,
-            duration: 2000,
-          });
-          this.loading = false;
-        });
+      let groupId = this.checkList[index].groupId
+
+      console.log(!checked);
+      if (!checked) {
+        //当前未选中，修改为选中
+        this.checkGroupIdList.push(groupId);
+        this.groupMask = this.groupMask | (1 << index);
+      } else {
+        //当前选终，修改为未选中
+        this.checkGroupIdList = this.checkGroupIdList.filter(item => item !== groupId)
+        let c = reverseCode(1 << index);
+        this.groupMask = this.groupMask & c;
+      }
+      console.log(this.checkGroupIdList)
+      // console.log(this.checkList[index].checked);
+
+    },
+    onGroupMaskChange() {
+      let checkGroupIdList = []
+      for (let i = 0; i < this.checkList.length; i++) {
+        let checked = (this.groupMask & (1 << i)) != 0 ? 1 : 0;
+        this.checkList[i].checked = checked;
+        if(checked) {
+          checkGroupIdList.push(this.checkList[i].groupId)
+        }
+      }
+      this.checkGroupIdList = ref(checkGroupIdList)
     },
     deleteAsnwer(id) {
       this.dataModify();
@@ -150,12 +202,55 @@ export default {
       //     this.loading = false;
       //   });
     },
+    saveQuestion() {
+      this.request
+        .post("/robot/api/question/updateCheckGroup", {
+          id: this.questionId,
+          groupMask: this.groupMask
+          // checkList: this.checkList,
+        })
+        .then((response) => {
+          ElNotification.success({
+            title: "操作成功",
+            message: response.message,
+            showClose: true,
+            duration: 2000,
+          });
+        })
+        .catch((error) => {
+          console.log(error);
+          ElNotification.error({
+            title: "操作失败",
+            message: error,
+            showClose: true,
+            duration: 2000,
+          });
+          this.loading = false;
+        });
+    },
   },
   mounted() {
     // let id = this.$route.query.id;
     this.getQuestionInfo(this.questionId);
   },
 };
+
+function fillBefore(str, fillChar, length) {
+  const fillLength = length - str.length;
+  if (fillLength < 0) {
+    return str;
+  }
+  return fillChar.repeat(fillLength) + str;
+}
+
+function reverseCode(num) {
+  let numString = fillBefore(num.toString(2), "0", 8);
+  numString = numString
+    .replaceAll("0", "2")
+    .replaceAll("1", "0")
+    .replaceAll("2", "1");
+  return parseInt(numString, 2);
+}
 </script>
 
 <style>
